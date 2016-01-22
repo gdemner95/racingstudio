@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.07.00">
+    <object class="AudioFile" id="{c454c151-b6fb-4a56-885a-4ca3b4a7dae9}">
+        <property name="frequencyInKHz">
+            <value>44.0999985</value>
+        </property>
+        <property name="channelCount">
+            <value>1</value>
+        </property>
+        <property name="length">
+            <value>3.1927891156462587</value>
+        </property>
+        <property name="audioFilePath">
+            <value>$(AUDIO_BIN_DIR)/skid3 {d2b47fca-5afc-4506-bfd7-b69de3df4ca0}.wav</value>
+        </property>
+        <relationship name="container">
+            <destination>{517db118-b6f3-405a-82cf-1e93be564177}</destination>
+        </relationship>
+    </object>
+</objects>

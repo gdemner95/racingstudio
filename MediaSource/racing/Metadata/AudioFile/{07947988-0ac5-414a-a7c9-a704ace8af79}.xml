@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.07.00">
+    <object class="AudioFile" id="{07947988-0ac5-414a-a7c9-a704ace8af79}">
+        <property name="frequencyInKHz">
+            <value>44.0999985</value>
+        </property>
+        <property name="channelCount">
+            <value>2</value>
+        </property>
+        <property name="length">
+            <value>1.2904535147392291</value>
+        </property>
+        <property name="audioFilePath">
+            <value>$(AUDIO_BIN_DIR)/med-crash3 {1dc8e9bf-30da-49ed-9d9a-7dadae04ba41}.wav</value>
+        </property>
+        <relationship name="container">
+            <destination>{517db118-b6f3-405a-82cf-1e93be564177}</destination>
+        </relationship>
+    </object>
+</objects>

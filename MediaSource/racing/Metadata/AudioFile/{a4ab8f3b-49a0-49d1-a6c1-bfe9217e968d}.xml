@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.07.00">
+    <object class="AudioFile" id="{a4ab8f3b-49a0-49d1-a6c1-bfe9217e968d}">
+        <property name="frequencyInKHz">
+            <value>96</value>
+        </property>
+        <property name="channelCount">
+            <value>2</value>
+        </property>
+        <property name="length">
+            <value>13.188677083333333</value>
+        </property>
+        <property name="audioFilePath">
+            <value>$(AUDIO_BIN_DIR)/HUTCH_HD_SFX_2014_0790 {2e971714-98b2-4760-9602-39f3ebcb9a21}.wav</value>
+        </property>
+        <relationship name="container">
+            <destination>{517db118-b6f3-405a-82cf-1e93be564177}</destination>
+        </relationship>
+    </object>
+</objects>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.07.00">
+    <object class="MixerGroup" id="{dacc9582-78a8-4df4-92ea-b7d587a528c9}">
+        <property name="name">
+            <value>electric-wires</value>
+        </property>
+        <relationship name="effectChain">
+            <destination>{d0e994b9-e5a8-4366-a1e9-c84ee4092b5c}</destination>
+        </relationship>
+        <relationship name="panner">
+            <destination>{f5e5d128-1142-48e6-9004-2d53f09cf4a1}</destination>
+        </relationship>
+        <relationship name="output">
+            <destination>{b788ea6c-da73-4f7d-8e5a-8534d1f321d5}</destination>
+        </relationship>
+        <relationship name="masters">
+            <destination>{8a01165e-09e5-48ba-a8a4-87d91668d059}</destination>
+        </relationship>
+    </object>
+    <object class="MixerBusEffectChain" id="{d0e994b9-e5a8-4366-a1e9-c84ee4092b5c}">
+        <relationship name="effects">
+            <destination>{18818b97-7f7f-44d8-8fab-78f97429c34f}</destination>
+        </relationship>
+    </object>
+    <object class="MixerBusPanner" id="{f5e5d128-1142-48e6-9004-2d53f09cf4a1}"/>
+    <object class="MixerBusFader" id="{18818b97-7f7f-44d8-8fab-78f97429c34f}"/>
+</objects>
