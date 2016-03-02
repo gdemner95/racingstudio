@@ -3,21 +3,22 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "../../../common/FMODHeaders.h"
-#include "Event Paths.h"
+//#include "Event Paths.h"
 #include "DataHeader.h"
-
+#include "MasterCar.h"
 #include "CarCrash.h"
 #include "CarEngine.h"
 #include "CarGear.h"
 #include "CarSkid.h"
 #include "CarTyres.h"
-#include "Atmos.h"
-#include "Crowd.h"
-#include "MissionControl.h"
-#include "Overbridge.h"
-#include "Tunnel.h"
-#include "Underbridge.h"
-#include "Wires.h"
+#include "Camera.h"
+//#include "Atmos.h"
+//#include "Crowd.h"
+//#include "MissionControl.h"
+//#include "Overbridge.h"
+//#include "Tunnel.h"
+//#include "Underbridge.h"
+//#include "Wires.h"
 
 using namespace FMOD::Studio;
 
@@ -60,39 +61,9 @@ private:
     CarEngine engine;
     CarSkid skid;
     CarGear gear;
-    trackAtmos atmos;
-    trackCrowd crowd;
-    trackMc missionControl;
-    trackOverbridge overBridge;
-    trackTunnel tunnel;
-    trackUnderbridge underBridge;
-    trackWires wires;
-    
-//    EventInstance* carCrash = nullptr;
-//    EventInstance* carEngine = nullptr;
-//    EventInstance* carGear = nullptr;
-//    EventInstance* carSkid = nullptr;
-//    EventInstance* carTyres = nullptr;
-    
-//    EventInstance* atmos = nullptr;
-//    EventInstance* crowd = nullptr;
-//    EventInstance* wires = nullptr;
-//
-//    EventInstance* overBridge = nullptr;
-//    EventInstance* underBridge = nullptr;
-//    EventInstance* tunnel = nullptr;
-//    EventInstance* missionControl = nullptr;
-    
-    
-    
+    playerCamera camera;
+
     Array<FMOD_RESULT> errExcept;
-    
-    Studio::ParameterInstance* distanceParameter;
-    Studio::ParameterInstance* gearParameter;
-    Studio::ParameterInstance* skidParameter;
-    Studio::ParameterInstance* speedParameter;
-    Studio::ParameterInstance* forceParameter;
-    Studio::ParameterInstance* intensityParameter;
 
     Bus* gearBus;
     Bus* atmosBus;
@@ -104,9 +75,9 @@ private:
     Bus* tyresBus;
     Bus* reverbBus;
 
-    VCA* EnvironmenVCA;
+    VCA* EnvironmentVCA;
     VCA* CarVCA;
-    
+    userCar car;
     int collisionWait;
     MasterObject object;
     EventObjects<MasterObject> objectDictionary;

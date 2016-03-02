@@ -11,12 +11,12 @@
 #ifndef CARCRASH_H_INCLUDED
 #define CARCRASH_H_INCLUDED
 #include "JuceHeader.h"
-#include "Strings.h"
+
 using namespace FMOD::Studio;
 class CarCrash{
 public:
     void handleHit(Studio::System* system, EventDescription* desc, double velocity){
-        ERRCHECK(system->getEvent(Strings::carCrashPath, &desc));
+        ERRCHECK(system->getEvent("event:/car/crash", &desc));
         ERRCHECK (desc->createInstance (&crashInstance));
         ERRCHECK(crashInstance->getParameter("intensity", &intensityParameter));
         intensityParameter->setValue(velocity);

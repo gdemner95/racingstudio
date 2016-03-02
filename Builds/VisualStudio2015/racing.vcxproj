@@ -915,23 +915,17 @@ copy ..\..\..\..\..\libs\fmod\fmodstudioapi\api\studio\lib\fmodstudio.dll .</Com
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\MainComponent.h"/>
+    <ClInclude Include="..\..\Source\MasterCar.h"/>
+    <ClInclude Include="..\..\Source\Camera.h"/>
     <ClInclude Include="..\..\Source\Descriptions.h"/>
-    <ClInclude Include="..\..\Source\Atmos.h"/>
     <ClInclude Include="..\..\Source\CarCrash.h"/>
     <ClInclude Include="..\..\Source\CarEngine.h"/>
     <ClInclude Include="..\..\Source\CarGear.h"/>
     <ClInclude Include="..\..\Source\CarSkid.h"/>
     <ClInclude Include="..\..\Source\CarTyres.h"/>
-    <ClInclude Include="..\..\Source\Crowd.h"/>
     <ClInclude Include="..\..\Source\MasterObject.h"/>
-    <ClInclude Include="..\..\Source\MissionControl.h"/>
-    <ClInclude Include="..\..\Source\Overbridge.h"/>
-    <ClInclude Include="..\..\Source\Tunnel.h"/>
-    <ClInclude Include="..\..\Source\Underbridge.h"/>
-    <ClInclude Include="..\..\Source\Wires.h"/>
     <ClInclude Include="..\..\Source\VectorHeader.h"/>
     <ClInclude Include="..\..\Source\DataHeader.h"/>
-    <ClInclude Include="..\..\Source\Event Paths.h"/>
     <ClInclude Include="..\..\..\..\common\ConnectionServer.h"/>
     <ClInclude Include="..\..\..\..\common\FMODHeaders.h"/>
     <ClInclude Include="..\..\..\..\common\GameEngineServer.h"/>

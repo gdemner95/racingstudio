@@ -1,5 +1,5 @@
 #include "MainComponent.h"
-#include "Event Paths.h"
+//#include "Event Paths.h"
 bool MainContentComponent::ERRCHECK_EXCEPT (FMOD_RESULT result, Array<FMOD_RESULT> const& errorExceptions)
 {
     if (result == FMOD_OK)                  return true;
@@ -96,37 +96,67 @@ void MainContentComponent::tick()
 
 void MainContentComponent::handleCreate (String const& name, int gameObjectInstanceID)
 {
+    Logger::outputDebugString(String(name));
+    
     EventDescription* desc = nullptr;
     if (name != "car" && name != "camera"){
-        objectDictionary.addEvent(name, gameObjectInstanceID, object.create(system, desc, name));
+        //crowd is set to mission control, therefor must be triggered at the same time
+        if(name =="missioncontrol"){
+            objectDictionary.addEvent(name, gameObjectInstanceID, object.create(system, desc, name));
+            objectDictionary.addEvent("crowd", gameObjectInstanceID, object.create(system, desc, "crowd"));
+            
+        }
+        else
+            objectDictionary.addEvent(name, gameObjectInstanceID, object.create(system, desc, name));   //other events are independent
     }
     else {
+        //the car sounds
         skid.create(system, desc);
         engine.create(system, desc);
         tyres.create(system, desc);
         crash.create(system, desc);
-        
     }
-
+    system->getVCA("vca:/Car", &CarVCA);
+    system->getVCA("vca:/Environment", &EnvironmentVCA);
+    system->getBus("bus:/gear", &gearBus);
+    system->getBus("bus:/atmos", &atmosBus);
+    system->getBus("bus:/crash", &crashBus);
+    system->getBus("bus:/engine", &engineBus);
+    system->getBus("bus:/skid", &skidBus);
+    system->getBus("bus:/tyres", &tyresBus);
+    system->getBus("bus:/crowd", &crowdBus);
+    system->getBus("bus:/Reverb", &reverbBus);
+    system->getBus("bus:/Environment", &wiresBus);
+    
+    CarVCA->setFaderLevel(1.0);
+    EnvironmentVCA->setFaderLevel(0.8);
+    gearBus->setFaderLevel(1.0);
+    atmosBus->setFaderLevel(1.0);
+    crashBus->setFaderLevel(0.9);
+    engineBus->setFaderLevel(1.0);
+    skidBus->setFaderLevel(0.3);
+    tyresBus->setFaderLevel(0.5);
+    crowdBus->setFaderLevel(1.0);
+    reverbBus->setFaderLevel(0.75);
+    wiresBus->setFaderLevel(1.0);
 }
 
 void MainContentComponent::handleDestroy (String const& name, int gameObjectInstanceID)
 {
-    
 }
 
 void MainContentComponent::handleVector (String const& name, int gameObjectInstanceID, String const& param, const Vector3* vector)
 {
-    if (name == "camera")
+    //camera and car are not assigned as objects in the dictionary
+    if(name != "camera" && name != "car"){
+        
+        objectDictionary.setVector(gameObjectInstanceID, param, vector);
+    }
+    //camera and car vector data must be assigned seperately
+    else if (name == "camera")
     {
-        //pass in vector from the handleVector call, event/object, 
         FMOD_3D_ATTRIBUTES camera3D;
-        ERRCHECK (system->getListenerAttributes(FMOD_MAIN_LISTENER, &camera3D));
-        if(param == "vel")  camera3D.velocity    =  *vector;
-        if(param == "pos")  camera3D.position    =  *vector;
-        if(param == "dir")  camera3D.forward     =  *vector;
-        if(param == "up")   camera3D.up          =  *vector;
-        ERRCHECK (system->setListenerAttributes(FMOD_MAIN_LISTENER, &camera3D));
+        camera.setVector(camera3D, system, vector, param);
     }
     else if(name == "car")
     {
@@ -142,85 +172,6 @@ void MainContentComponent::handleVector (String const& name, int gameObjectInsta
         skid.setVector(car3D);
         crash.setVector(car3D);
         tyres.setVector(car3D);
-
-    }
-    else if(name == "missioncontrol")
-    {
-        FMOD_3D_ATTRIBUTES missionControl3D;
-        missionControl3D = missionControl.getVector();
-        
-        if(param == "vel") missionControl3D.velocity = *vector;
-        if(param == "pos") missionControl3D.position = *vector;
-        if(param == "dir") missionControl3D.forward = *vector;
-        if(param == "up") missionControl3D.up = *vector;
-        
-        missionControl.setVector(missionControl3D);
-    }
-//    else if(name == "wires")
-//    {
-//        FMOD_3D_ATTRIBUTES wires3D;
-//        EventInstance* tempEvent = eventObject.getEvent(gameObjectInstanceID);
-//        tempEvent->get3DAttributes(&wires3D);
-//        
-//        if(param == "vel") wires3D.velocity = *vector;
-//        if(param == "pos") wires3D.position = *vector;
-//        if(param == "dir") wires3D.forward = *vector;
-//        if(param == "up") wires3D.up = *vector;
-//        if(tempEvent != nullptr){
-//            ERRCHECK(tempEvent->set3DAttributes(&wires3D));
-//        }
-//    }
-    else if (name == "tunnel")
-    {
-        FMOD_3D_ATTRIBUTES tunnel3D;
-        tunnel3D = tunnel.getVector();
-        
-        if(param == "vel") tunnel3D.velocity = *vector;
-        if(param == "pos") tunnel3D.position = *vector;
-        if(param == "dir") tunnel3D.forward = *vector;
-        if(param == "up") tunnel3D.up = *vector;
-        tunnel.setVector(tunnel3D);
-    }
-    else if (name == "atmos")
-    {
-        FMOD_3D_ATTRIBUTES atmos3D;
-        atmos3D = atmos.getVector();
-        
-        if(param == "vel") atmos3D.velocity = *vector;
-        if(param == "pos") atmos3D.position = *vector;
-        if(param == "dir") atmos3D.forward = *vector;
-        if(param == "up") atmos3D.up = *vector;
-        atmos.setVector(atmos3D);
-        
-    }
-    else if (name == "overbridge"){
-        FMOD_3D_ATTRIBUTES overBridge3d;
-        overBridge3d = overBridge.getVector();
-        if(param == "vel") overBridge3d.velocity = *vector;
-        if(param == "pos") overBridge3d.position = *vector;
-        if(param == "dir") overBridge3d.forward = *vector;
-        if(param == "up") overBridge3d.up = *vector;
-        overBridge.setVector(overBridge3d);
-    }
-    else if (name == "underbridge")
-    {
-        FMOD_3D_ATTRIBUTES underBridge3d;
-        underBridge3d = underBridge.getVector();
-        if(param == "vel") underBridge3d.velocity = *vector;
-        if(param == "pos") underBridge3d.position = *vector;
-        if(param == "dir") underBridge3d.forward = *vector;
-        if(param == "up") underBridge3d.up = *vector;
-        underBridge.setVector(underBridge3d);
-    }
-    else if (name == "crowd")
-    {
-        FMOD_3D_ATTRIBUTES crowd3d;
-        crowd3d = crowd.getVector();
-        if(param == "vel") crowd3d.velocity = *vector;
-        if(param == "pos") crowd3d.position = *vector;
-        if(param == "dir") crowd3d.forward = *vector;
-        if(param == "up") crowd3d.up = *vector;
-        crowd.setVector(crowd3d);
     }
 }
 
@@ -230,10 +181,9 @@ void MainContentComponent::handleHit (String const& name, int gameObjectInstance
         return;
     else{
         EventDescription* desc = nullptr;
-        
         if(name == "car")
-            crash.handleHit(system, desc, collision.velocity);
-        
+            car.handleHit(system, desc, collision.velocity);
+//            crash.handleHit(system, desc, collision.velocity);//passes the description and the velocity
     }
 }
 
@@ -249,7 +199,7 @@ void MainContentComponent::handleInt (String const& name, int gameObjectInstance
     {
         EventDescription* desc = nullptr;
         if(param == "gear")
-            gear.changeGear(system, desc, value);
+            car.changeGear(system, desc, value);
     }
 }
 
@@ -261,7 +211,7 @@ void MainContentComponent::handleReal (String const& name, int gameObjectInstanc
     else{
         if(param == "skid")
             skid.setSkid(value);
-
+        
         else if(param == "rpm")
             engine.setRpm(value);
         
@@ -270,7 +220,6 @@ void MainContentComponent::handleReal (String const& name, int gameObjectInstanc
         
         else if(param == "torque")
             tyres.setForce(value);
-        
     }
 }
 void MainContentComponent::handleString (String const& name, int gameObjectInstanceID, String const& param, String const& content)
@@ -280,6 +229,3 @@ void MainContentComponent::handleString (String const& name, int gameObjectInsta
 void MainContentComponent::handleOther (String const& name, String const& t, String const& value)
 {
 }
-
-
-

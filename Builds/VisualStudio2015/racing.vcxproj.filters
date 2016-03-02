@@ -1032,10 +1032,13 @@
     <ClInclude Include="..\..\Source\MainComponent.h">
       <Filter>racing</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\Descriptions.h">
+    <ClInclude Include="..\..\Source\MasterCar.h">
       <Filter>racing\Source\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\Atmos.h">
+    <ClInclude Include="..\..\Source\Camera.h">
+      <Filter>racing\Source\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Descriptions.h">
       <Filter>racing\Source\Objects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\CarCrash.h">
@@ -1053,34 +1056,13 @@
     <ClInclude Include="..\..\Source\CarTyres.h">
       <Filter>racing\Source\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\Crowd.h">
-      <Filter>racing\Source\Objects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\MasterObject.h">
-      <Filter>racing\Source\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\MissionControl.h">
-      <Filter>racing\Source\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Overbridge.h">
-      <Filter>racing\Source\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Tunnel.h">
-      <Filter>racing\Source\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Underbridge.h">
-      <Filter>racing\Source\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Wires.h">
       <Filter>racing\Source\Objects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\VectorHeader.h">
       <Filter>racing\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\DataHeader.h">
-      <Filter>racing\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Event Paths.h">
       <Filter>racing\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\common\ConnectionServer.h">

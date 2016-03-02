@@ -19,20 +19,22 @@ public:
         paths.setData();
     }
     EventInstance* create(Studio::System* system, EventDescription* desc, String const& name){
+        if(name == "missioncontrol"){
+            ERRCHECK(system->getEvent ((paths.getData(name)).toRawUTF8(), &desc));//pass in the string in the function call
+            ERRCHECK(desc->createInstance(&event));
+            ERRCHECK(event->start());
+            ERRCHECK(system->getEvent ((paths.getData("crowd")).toRawUTF8(), &desc));//pass in the string in the function call
+            ERRCHECK(desc->createInstance(&event));
+            ERRCHECK(event->start());
+        }
+        else{
         ERRCHECK(system->getEvent ((paths.getData(name)).toRawUTF8(), &desc));//pass in the string in the function call
-        ERRCHECK(desc->createInstance(&event));
-        FMOD_3D_ATTRIBUTES attr3d;
-        
+        ERRCHECK(desc->createInstance(&event));        
         ERRCHECK(event->start());
-        
+        }
         return event;
     }
 
-//    FMOD_3D_ATTRIBUTES getVector(){
-//        FMOD_3D_ATTRIBUTES attr3d;
-//        crowd->get3DAttributes(&attr3d);
-//        return attr3d;
-//    }
 private:
     EventPaths paths;
     EventInstance* event;
