@@ -28,40 +28,33 @@ template<class ObjectType>
 class EventObjects
 {
 public:
-    void addEvent(String const& name, int ID, EventInstance* event)
+    void addEvent(String const& name, int ID, EventInstance* event)                            //adds events that can be recalled using their gameObjectInstanceID or name
     {
         ids.add(ID);
         events.add(event);
         names.add(name);
     }
-    EventInstance* getEvent(int ID)
+    EventInstance* getEvent(int ID)                                                            //returns the event
     {
         int eventIndex = ids.indexOf(ID);
-        
         return events.getUnchecked(eventIndex);
     }
     void setVector(int ID, String const& param, const Vector3* vector)
     {
         int index = ids.indexOf(ID);
+        EventInstance* tempEvent = getEvent(ID);
+        FMOD_3D_ATTRIBUTES attr3d;
+        
         if(names[index] == "crowd")
         {
             int ind = names.indexOf("missioncontrol");
             EventInstance* mc = getEvent(ind);
-            
-            EventInstance* tempEvent = getEvent(ID);
-            FMOD_3D_ATTRIBUTES attr3d;
             ERRCHECK(mc->get3DAttributes(&attr3d));
-            if(param == "vel")  attr3d.velocity    =  *vector;
-            if(param == "pos")  attr3d.position    =  *vector;
-            if(param == "dir")  attr3d.forward     =  *vector;
-            if(param == "up")   attr3d.up          =  *vector;
-            
-            ERRCHECK(tempEvent->set3DAttributes (&attr3d));
         }
         else
         {
-        EventInstance* tempEvent = getEvent(ID);
-        FMOD_3D_ATTRIBUTES attr3d;
+            ERRCHECK(tempEvent->get3DAttributes(&attr3d));
+        }
         ERRCHECK(tempEvent->get3DAttributes(&attr3d));
         if(param == "vel")  attr3d.velocity    =  *vector;
         if(param == "pos")  attr3d.position    =  *vector;
@@ -69,9 +62,8 @@ public:
         if(param == "up")   attr3d.up          =  *vector;
         
         ERRCHECK(tempEvent->set3DAttributes (&attr3d));
-        }
+        
     }
-
 private:
     Array<int> ids;
     Array<String> names;
@@ -79,8 +71,4 @@ private:
     Studio::System* system;
     Array<FMOD_RESULT> errExcept;
 };
-
-
-
-
 #endif  // DATAHEADER_H_INCLUDED

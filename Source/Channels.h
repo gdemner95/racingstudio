@@ -12,7 +12,7 @@
 #define CHANNELS_H_INCLUDED
 
 using namespace FMOD::Studio;
-
+//class for setting vca and bus levels
 class busVca{
 public:
     void init(Studio::System* system){

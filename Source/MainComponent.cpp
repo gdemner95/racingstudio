@@ -10,6 +10,7 @@ bool MainContentComponent::ERRCHECK_EXCEPT (FMOD_RESULT result, Array<FMOD_RESUL
 }
 MainContentComponent::MainContentComponent()
 {
+    //collision wait prevents any impact sounds occuring at the start of the game.
     collisionWait = 100;
     FMOD_Debug_Initialize (FMOD_DEBUG_LEVEL_NONE, FMOD_DEBUG_MODE_TTY, nullptr, nullptr);
     MasterObject();
@@ -53,7 +54,6 @@ void MainContentComponent::initFMODStudio()
 void MainContentComponent::shutdownFMODStudio()
 {
     // release the system
-    
     if (system != nullptr)
         if (system->isValid())
             ERRCHECK (system->release());
@@ -79,6 +79,7 @@ void MainContentComponent::tick()
     if (collisionWait > 0)
         --collisionWait;
     
+    //check we have a valid system
     if (system != nullptr)
         if (system->isValid())
             ERRCHECK (system->update());
@@ -86,7 +87,8 @@ void MainContentComponent::tick()
 
 void MainContentComponent::handleCreate (String const& name, int gameObjectInstanceID)
 {
-    if (name != "car" && name != "camera"){
+    if (name != "car" && name != "camera")
+    {
         //crowd is set to mission control, therefor must be triggered at the same time
         if(name == "missioncontrol")
         {
@@ -94,10 +96,15 @@ void MainContentComponent::handleCreate (String const& name, int gameObjectInsta
             objectDictionary.addEvent("crowd", gameObjectInstanceID, object.create(system, "crowd"));
         }
         else
-            objectDictionary.addEvent(name, gameObjectInstanceID, object.create(system, name));   //other events are independent
+        {
+            objectDictionary.addEvent(name, gameObjectInstanceID, object.create(system, name));
+        }
     }
     else
+    {
         car.handleCreate(system);
+    }
+    
     channels.init(system);
 }
 
@@ -108,19 +115,20 @@ void MainContentComponent::handleDestroy (String const& name, int gameObjectInst
 void MainContentComponent::handleVector (String const& name, int gameObjectInstanceID, String const& param, const Vector3* vector)
 {
     //camera and car are not assigned as objects in the dictionary
-    if(name != "camera" && name != "car")
+    if (name != "camera" && name != "car")
         objectDictionary.setVector(gameObjectInstanceID, param, vector);
 
-    else if (name == "camera")  camera.setVector(system, vector, param);
-    else if(name == "car")      car.handleVector(vector, param);
+    else if (name == "camera")          camera.setVector(system, vector, param);
+    else if (name == "car")             car.handleVector(vector, param);
 }
 
 void MainContentComponent::handleHit (String const& name, int gameObjectInstanceID, Collision const& collision)
 {
-    if(collisionWait > 0)
+    if (collisionWait > 0)
         return;
     
-    if(name == "car" && collision.velocity > 0) car.handleHit(system, collision.velocity);
+    if (name == "car" && collision.velocity > 0)
+        car.handleHit(system, collision.velocity);
 }
 
 void MainContentComponent::handleBool (String const& name, int gameObjectInstanceID, String const& param, bool flag)
@@ -129,16 +137,16 @@ void MainContentComponent::handleBool (String const& name, int gameObjectInstanc
 
 void MainContentComponent::handleInt (String const& name, int gameObjectInstanceID, String const& param, int value)
 {    
-    if(param == "gear")         car.changeGear(system, value);
+    if (param == "gear")                car.changeGear(system, value);
 }
 
 void MainContentComponent::handleReal (String const& name, int gameObjectInstanceID, String const& param, double value)
 {
-    if(param == "skid")         car.handleSkid(value);
-    if(param == "load")         car.handleLoad(value);
-    if(param == "rpm")          car.setRpm(value);
-    if(param == "speed")        car.handleSpeed(value);
-    if(param == "torque")       car.handleForce(value);
+    if (param == "skid")                car.handleSkid(value);
+    if (param == "load")                car.handleLoad(value);
+    if (param == "rpm")                 car.setRpm(value);
+    if (param == "speed")               car.handleSpeed(value);
+    if (param == "torque")              car.handleForce(value);
 }
 
 void MainContentComponent::handleString (String const& name, int gameObjectInstanceID, String const& param, String const& content)

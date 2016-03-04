@@ -11,7 +11,7 @@
 #ifndef DESCRIPTIONS_H_INCLUDED
 #define DESCRIPTIONS_H_INCLUDED
 #include "JuceHeader.h"
-
+// class that holds the paths against a key to be referenced from
 class EventPaths
 {
 public:

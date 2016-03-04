@@ -17,7 +17,7 @@
 class userCar
 {
 public:
-    void handleCreate(Studio::System* system)
+    void handleCreate(Studio::System* system)                                               //load all the event sounds and start the ones that are continuous
     {
         engineRange.start = 0.0;
         engineRange.end = 1.0;
@@ -57,10 +57,13 @@ public:
     void changeGear(Studio::System* system, double value)
     {
         gear = value;
-        if (gear < prevGear)        ERRCHECK(gearChange->setValue(value / 4.0));
+        if (gear < prevGear)                                                                    //if the gear is less than the previous, play the blowoof sound
+        {
+            ERRCHECK(gearChange->setValue(value / 4.0));
+            prevGear = gear;
+        };
         
         ERRCHECK (gearEvent->start());
-        prevGear = gear;
     }
     void setRpm(double value)
     {
@@ -68,7 +71,7 @@ public:
     }
     void handleLoad(double value)
     {
-        loadValue->setValue(engineRange.convertFrom0to1(value));
+        loadValue->setValue(engineRange.convertFrom0to1(value));                                //scales the load parameter using a normalisable range.
     }
     void handleSpeed(double value)
     {
@@ -94,6 +97,7 @@ public:
         if(param == "dir")  attr3d.forward     =  *vector;
         if(param == "up")   attr3d.up          =  *vector;
         
+        //sets all the vector values to the engine location.
         ERRCHECK(engine->set3DAttributes (&attr3d));
         ERRCHECK(skid->set3DAttributes (&attr3d));
         ERRCHECK(carTyres->set3DAttributes (&attr3d));
