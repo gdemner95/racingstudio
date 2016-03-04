@@ -1032,6 +1032,9 @@
     <ClInclude Include="..\..\Source\MainComponent.h">
       <Filter>racing</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\Channels.h">
+      <Filter>racing\Source\Objects</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\MasterCar.h">
       <Filter>racing\Source\Objects</Filter>
     </ClInclude>
@@ -1041,26 +1044,8 @@
     <ClInclude Include="..\..\Source\Descriptions.h">
       <Filter>racing\Source\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\CarCrash.h">
-      <Filter>racing\Source\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\CarEngine.h">
-      <Filter>racing\Source\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\CarGear.h">
-      <Filter>racing\Source\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\CarSkid.h">
-      <Filter>racing\Source\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\CarTyres.h">
-      <Filter>racing\Source\Objects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\MasterObject.h">
       <Filter>racing\Source\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\VectorHeader.h">
-      <Filter>racing\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\DataHeader.h">
       <Filter>racing\Source</Filter>

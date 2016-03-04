@@ -3,23 +3,10 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "../../../common/FMODHeaders.h"
-//#include "Event Paths.h"
 #include "DataHeader.h"
 #include "MasterCar.h"
-#include "CarCrash.h"
-#include "CarEngine.h"
-#include "CarGear.h"
-#include "CarSkid.h"
-#include "CarTyres.h"
 #include "Camera.h"
-//#include "Atmos.h"
-//#include "Crowd.h"
-//#include "MissionControl.h"
-//#include "Overbridge.h"
-//#include "Tunnel.h"
-//#include "Underbridge.h"
-//#include "Wires.h"
-
+#include "Channels.h"
 using namespace FMOD::Studio;
 
 class MainContentComponent  : public Component,
@@ -55,14 +42,9 @@ public:
     
 private:
     Studio::System* system = nullptr;
-    
-    CarCrash crash;
-    CarTyres tyres;
-    CarEngine engine;
-    CarSkid skid;
-    CarGear gear;
     playerCamera camera;
-
+    userCar car;
+    busVca channels;
     Array<FMOD_RESULT> errExcept;
 
     Bus* gearBus;
@@ -77,11 +59,9 @@ private:
 
     VCA* EnvironmentVCA;
     VCA* CarVCA;
-    userCar car;
     int collisionWait;
     MasterObject object;
     EventObjects<MasterObject> objectDictionary;
-    NormalisableRange<double> engineRange;
 };
 
 #endif  // MAINCOMPONENT_H_INCLUDED

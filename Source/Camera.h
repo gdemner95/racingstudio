@@ -16,7 +16,8 @@ using namespace FMOD::Studio;
 
 class playerCamera{
 public:
-    void setVector(FMOD_3D_ATTRIBUTES attr3d, Studio::System* system, const Vector3* vector, String const& param){
+    void setVector(Studio::System* system, const Vector3* vector, String const& param){
+        FMOD_3D_ATTRIBUTES attr3d;
         ERRCHECK (system->getListenerAttributes(FMOD_MAIN_LISTENER, &attr3d));
         if(param == "vel")  attr3d.velocity    =  *vector;
         if(param == "pos")  attr3d.position    =  *vector;

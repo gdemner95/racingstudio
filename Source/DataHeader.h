@@ -31,7 +31,6 @@ public:
         ids.add(ID);
         events.add(event);
         names.add(name);
-        printf("ID = %d", ID);
     }
     EventInstance* getEvent(int ID){
         int eventIndex = ids.indexOf(ID);

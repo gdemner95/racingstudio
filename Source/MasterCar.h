@@ -12,39 +12,112 @@
 #define MASTERCAR_H_INCLUDED
 
 #include "JuceHeader.h"
-#include "CarCrash.h"
-#include "CarEngine.h"
-#include "CarGear.h"
-#include "CarSkid.h"
-#include "CarTyres.h"
 #include "Descriptions.h"
 
 class userCar{
 public:
-    void handleHit(Studio::System* system, EventDescription* desc, double velocity){
-        EventInstance* crashInstance;
-        Studio::ParameterInstance* intensityParameter;
-        ERRCHECK(system->getEvent((paths.getData("crash")).toRawUTF8(), &desc));
+    void handleCreate(Studio::System* system){
+        engineRange.start = 0.0;
+        engineRange.end = 1.0;
+        engineRange.skew = 2.0;
+        EventDescription* desc;
+        ERRCHECK(system->getEvent ("event:/car/engine", &desc));
+        ERRCHECK(desc->createInstance(&engine));
+        engine->getParameter("rpm", &rpm);
+        engine->getParameter("load", &loadValue);
+        setRpm(800);
+        ERRCHECK(engine->start());
+        
+        ERRCHECK(system->getEvent ("event:/car/skid", &desc));
+        ERRCHECK(desc->createInstance(&skid));
+        ERRCHECK(skid->start());
+        
+        ERRCHECK(system->getEvent ("event:/car/tyres", &desc));
+        ERRCHECK(desc->createInstance(&carTyres));
+        carTyres->getParameter("speed", &speedValue);
+        carTyres->getParameter("force", &forceValue);
+        ERRCHECK(carTyres->start());
+        
+        ERRCHECK(system->getEvent("event:/car/crash", &desc));
         ERRCHECK (desc->createInstance (&crashInstance));
         ERRCHECK(crashInstance->getParameter("intensity", &intensityParameter));
+
+        ERRCHECK(system->getEvent ("event:/car/gear", &desc));
+        ERRCHECK (desc->createInstance (&gearEvent));
+        ERRCHECK(gearEvent->getParameter("blowoff", &gearChange));
+
+    }
+    void handleHit(Studio::System* system, double velocity)
+    {
         intensityParameter->setValue(velocity);
         ERRCHECK (crashInstance->start());
-        printf("%f\n", velocity);
     }
-    void changeGear(Studio::System* system, EventDescription* desc, double value){
-        EventInstance* gearEvent;
-        Studio::ParameterInstance* gearChange;
-        ERRCHECK(system->getEvent ((paths.getData("gear")).toRawUTF8(), &desc));
-        ERRCHECK (desc->createInstance (&gearEvent));
+    void changeGear(Studio::System* system, double value)
+    {
+        gear = value;
+        if (gear < prevGear)        ERRCHECK(gearChange->setValue(value / 4.0));
         
-        ERRCHECK(gearEvent->getParameter("blowoff", &gearChange));
-        
-        ERRCHECK(gearChange->setValue(value));
         ERRCHECK (gearEvent->start());
+        prevGear = gear;
+    }
+    void setRpm(double value)
+    {
+        rpm->setValue(value);
+    }
+    void handleLoad(double value)
+    {
+        loadValue->setValue(engineRange.convertFrom0to1(value));
+    }
+    void handleSpeed(double value)
+    {
+        speed = value;
+        speedValue->setValue(value);
+    }
+    void handleForce(double value)
+    {
+        forceValue->setValue(value);
+    }
+    void handleSkid(double value)
+    {
+        skidValue->setValue(value);
+    }
+    void handleVector(const Vector3* vector, String const& param)
+    {
+        FMOD_3D_ATTRIBUTES attr3d;
+        
+        ERRCHECK(engine->get3DAttributes(&attr3d));
+        
+        if(param == "vel")  attr3d.velocity    =  *vector;
+        if(param == "pos")  attr3d.position    =  *vector;
+        if(param == "dir")  attr3d.forward     =  *vector;
+        if(param == "up")   attr3d.up          =  *vector;
+        
+        ERRCHECK(engine->set3DAttributes (&attr3d));
+        ERRCHECK(skid->set3DAttributes (&attr3d));
+        ERRCHECK(carTyres->set3DAttributes (&attr3d));
+        ERRCHECK(gearEvent->set3DAttributes (&attr3d));
+        ERRCHECK(crashInstance->set3DAttributes(&attr3d));
     }
 private:
-    float speed;
-    int gear;
+    EventInstance* engine;
+    EventInstance* skid;
+    EventInstance* carTyres;
+    EventInstance* gearEvent;
+    EventInstance* crashInstance;
+
+    Studio::ParameterInstance* rpm;
+    Studio::ParameterInstance* gearChange;
+    Studio::ParameterInstance* intensityParameter;
+    Studio::ParameterInstance* forceValue;
+    Studio::ParameterInstance* skidValue;
+    Studio::ParameterInstance* speedValue;
+    Studio::ParameterInstance* loadValue;
+    
+    float speed = 0;
+    int gear = 0;
+    int prevGear = 0;
+    
+    NormalisableRange<float> engineRange;
     
     EventPaths paths;
 };

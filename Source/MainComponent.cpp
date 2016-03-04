@@ -15,10 +15,6 @@ MainContentComponent::MainContentComponent()
     MasterObject();
     setSize (200, 200);
     
-    engineRange.start = 0;
-    engineRange.end = 95;
-    engineRange.skew = 2;
-    
     // launches the other, game, app
     launchGame();
 }
@@ -26,7 +22,6 @@ MainContentComponent::MainContentComponent()
 MainContentComponent::~MainContentComponent()
 {
 }
-
 
 void MainContentComponent::initFMODStudio()
 {
@@ -53,9 +48,6 @@ void MainContentComponent::initFMODStudio()
     ERRCHECK (system->loadBankFile (stringsPath.getFullPathName().toUTF8(),
                                     FMOD_STUDIO_LOAD_BANK_NORMAL,
                                     &stringsBank));
-    
-    
-    
 }
 
 void MainContentComponent::shutdownFMODStudio()
@@ -84,10 +76,8 @@ void MainContentComponent::handleDisconnect()
 
 void MainContentComponent::tick()
 {
-    // we must call call update() regularly
-    
     if (collisionWait > 0)
-        --collisionWait; // decrement the counter
+        --collisionWait;
     
     if (system != nullptr)
         if (system->isValid())
@@ -96,49 +86,19 @@ void MainContentComponent::tick()
 
 void MainContentComponent::handleCreate (String const& name, int gameObjectInstanceID)
 {
-    Logger::outputDebugString(String(name));
-    
-    EventDescription* desc = nullptr;
     if (name != "car" && name != "camera"){
         //crowd is set to mission control, therefor must be triggered at the same time
-        if(name =="missioncontrol"){
-            objectDictionary.addEvent(name, gameObjectInstanceID, object.create(system, desc, name));
-            objectDictionary.addEvent("crowd", gameObjectInstanceID, object.create(system, desc, "crowd"));
-            
+        if(name == "missioncontrol")
+        {
+            objectDictionary.addEvent(name, gameObjectInstanceID, object.create(system, name));
+            objectDictionary.addEvent("crowd", gameObjectInstanceID, object.create(system, "crowd"));
         }
         else
-            objectDictionary.addEvent(name, gameObjectInstanceID, object.create(system, desc, name));   //other events are independent
+            objectDictionary.addEvent(name, gameObjectInstanceID, object.create(system, name));   //other events are independent
     }
-    else {
-        //the car sounds
-        skid.create(system, desc);
-        engine.create(system, desc);
-        tyres.create(system, desc);
-        crash.create(system, desc);
-    }
-    system->getVCA("vca:/Car", &CarVCA);
-    system->getVCA("vca:/Environment", &EnvironmentVCA);
-    system->getBus("bus:/gear", &gearBus);
-    system->getBus("bus:/atmos", &atmosBus);
-    system->getBus("bus:/crash", &crashBus);
-    system->getBus("bus:/engine", &engineBus);
-    system->getBus("bus:/skid", &skidBus);
-    system->getBus("bus:/tyres", &tyresBus);
-    system->getBus("bus:/crowd", &crowdBus);
-    system->getBus("bus:/Reverb", &reverbBus);
-    system->getBus("bus:/Environment", &wiresBus);
-    
-    CarVCA->setFaderLevel(1.0);
-    EnvironmentVCA->setFaderLevel(0.8);
-    gearBus->setFaderLevel(1.0);
-    atmosBus->setFaderLevel(1.0);
-    crashBus->setFaderLevel(0.9);
-    engineBus->setFaderLevel(1.0);
-    skidBus->setFaderLevel(0.3);
-    tyresBus->setFaderLevel(0.5);
-    crowdBus->setFaderLevel(1.0);
-    reverbBus->setFaderLevel(0.75);
-    wiresBus->setFaderLevel(1.0);
+    else
+        car.handleCreate(system);
+    channels.init(system);
 }
 
 void MainContentComponent::handleDestroy (String const& name, int gameObjectInstanceID)
@@ -148,43 +108,19 @@ void MainContentComponent::handleDestroy (String const& name, int gameObjectInst
 void MainContentComponent::handleVector (String const& name, int gameObjectInstanceID, String const& param, const Vector3* vector)
 {
     //camera and car are not assigned as objects in the dictionary
-    if(name != "camera" && name != "car"){
-        
+    if(name != "camera" && name != "car")
         objectDictionary.setVector(gameObjectInstanceID, param, vector);
-    }
-    //camera and car vector data must be assigned seperately
-    else if (name == "camera")
-    {
-        FMOD_3D_ATTRIBUTES camera3D;
-        camera.setVector(camera3D, system, vector, param);
-    }
-    else if(name == "car")
-    {
-        FMOD_3D_ATTRIBUTES car3D;
-        car3D = engine.getVector();
-        
-        if(param == "vel") car3D.velocity = *vector;
-        if(param == "pos") car3D.position = *vector;
-        if(param == "dir") car3D.forward = *vector;
-        if(param == "up") car3D.up = *vector;
-        
-        engine.setVector(car3D);
-        skid.setVector(car3D);
-        crash.setVector(car3D);
-        tyres.setVector(car3D);
-    }
+
+    else if (name == "camera")  camera.setVector(system, vector, param);
+    else if(name == "car")      car.handleVector(vector, param);
 }
 
 void MainContentComponent::handleHit (String const& name, int gameObjectInstanceID, Collision const& collision)
 {
     if(collisionWait > 0)
         return;
-    else{
-        EventDescription* desc = nullptr;
-        if(name == "car")
-            car.handleHit(system, desc, collision.velocity);
-//            crash.handleHit(system, desc, collision.velocity);//passes the description and the velocity
-    }
+    
+    if(name == "car" && collision.velocity > 0) car.handleHit(system, collision.velocity);
 }
 
 void MainContentComponent::handleBool (String const& name, int gameObjectInstanceID, String const& param, bool flag)
@@ -192,36 +128,19 @@ void MainContentComponent::handleBool (String const& name, int gameObjectInstanc
 }
 
 void MainContentComponent::handleInt (String const& name, int gameObjectInstanceID, String const& param, int value)
-{
-    if(collisionWait > 0)
-        return;
-    else
-    {
-        EventDescription* desc = nullptr;
-        if(param == "gear")
-            car.changeGear(system, desc, value);
-    }
+{    
+    if(param == "gear")         car.changeGear(system, value);
 }
 
 void MainContentComponent::handleReal (String const& name, int gameObjectInstanceID, String const& param, double value)
 {
-    
-    if(collisionWait > 0)
-        return;
-    else{
-        if(param == "skid")
-            skid.setSkid(value);
-        
-        else if(param == "rpm")
-            engine.setRpm(value);
-        
-        else if(param == "speed")
-            tyres.setSpeed(value);
-        
-        else if(param == "torque")
-            tyres.setForce(value);
-    }
+    if(param == "skid")         car.handleSkid(value);
+    if(param == "load")         car.handleLoad(value);
+    if(param == "rpm")          car.setRpm(value);
+    if(param == "speed")        car.handleSpeed(value);
+    if(param == "torque")       car.handleForce(value);
 }
+
 void MainContentComponent::handleString (String const& name, int gameObjectInstanceID, String const& param, String const& content)
 {
 }
