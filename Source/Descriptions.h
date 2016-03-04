@@ -12,9 +12,11 @@
 #define DESCRIPTIONS_H_INCLUDED
 #include "JuceHeader.h"
 
-class EventPaths{
+class EventPaths
+{
 public:
-    void setData(){
+    void setData()
+    {
         dataMap.set("crash",            "event:/car/crash");
         dataMap.set("engine",           "event:/car/engine");
         dataMap.set("gear",             "event:/car/gear");
@@ -28,14 +30,12 @@ public:
         dataMap.set("underbridge",      "event:/reverbs/underbridge");
         dataMap.set("missioncontrol",   "event:/reverbs/missioncontrol");
     }
-    String getData(String const& name){
+    String getData(String const& name)
+    {
         Logger::outputDebugString(dataMap[name]);
         return dataMap[name];
     }
     HashMap<String, String> dataMap;
-    
-    
-    
 private:
 };
 

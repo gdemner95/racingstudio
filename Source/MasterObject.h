@@ -13,13 +13,17 @@
 #include "JuceHeader.h"
 #include "Descriptions.h"
 using namespace FMOD::Studio;
-class MasterObject{
+class MasterObject
+{
 public:
-    MasterObject(){
+    MasterObject()
+    {
         paths.setData();
     }
-    EventInstance* create(Studio::System* system, String const& name){
-        if(name == "missioncontrol"){
+    EventInstance* create(Studio::System* system, String const& name)
+    {
+        if(name == "missioncontrol")
+        {
             EventDescription* desc;
             ERRCHECK(system->getEvent ((paths.getData(name)).toRawUTF8(), &desc));//pass in the string in the function call
             ERRCHECK(desc->createInstance(&event));

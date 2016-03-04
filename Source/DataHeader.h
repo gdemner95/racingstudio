@@ -25,19 +25,23 @@ static bool ERRCHECK_EXCEPT (FMOD_RESULT result, Array<FMOD_RESULT> const& error
 }
 
 template<class ObjectType>
-class EventObjects {
+class EventObjects
+{
 public:
-    void addEvent(String const& name, int ID, EventInstance* event){
+    void addEvent(String const& name, int ID, EventInstance* event)
+    {
         ids.add(ID);
         events.add(event);
         names.add(name);
     }
-    EventInstance* getEvent(int ID){
+    EventInstance* getEvent(int ID)
+    {
         int eventIndex = ids.indexOf(ID);
         
         return events.getUnchecked(eventIndex);
     }
-    void setVector(int ID, String const& param, const Vector3* vector){
+    void setVector(int ID, String const& param, const Vector3* vector)
+    {
         int index = ids.indexOf(ID);
         if(names[index] == "crowd")
         {

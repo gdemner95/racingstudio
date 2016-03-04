@@ -14,9 +14,11 @@
 #include "JuceHeader.h"
 #include "Descriptions.h"
 
-class userCar{
+class userCar
+{
 public:
-    void handleCreate(Studio::System* system){
+    void handleCreate(Studio::System* system)
+    {
         engineRange.start = 0.0;
         engineRange.end = 1.0;
         engineRange.skew = 2.0;

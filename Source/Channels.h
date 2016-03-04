@@ -54,11 +54,6 @@ private:
     
     VCA* EnvironmentVCA;
     VCA* CarVCA;
-    
-    
-    
-    
-    
 };
 
 
