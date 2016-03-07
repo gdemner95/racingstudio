@@ -39,8 +39,4 @@ public:
 private:
 };
 
-
-
-
-
 #endif  // DESCRIPTIONS_H_INCLUDED

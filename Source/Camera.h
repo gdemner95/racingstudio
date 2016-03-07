@@ -32,7 +32,4 @@ private:
     
 };
 
-
-
-
 #endif  // CAMERA_H_INCLUDED

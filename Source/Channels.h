@@ -29,14 +29,14 @@ public:
         system->getBus("bus:/Reverb", &reverbBus);
         system->getBus("bus:/Environment", &wiresBus);
         
-        CarVCA->setFaderLevel(0.8);
+        CarVCA->setFaderLevel(1.0);
         EnvironmentVCA->setFaderLevel(1.0);
-        gearBus->setFaderLevel(1.0);
+        gearBus->setFaderLevel(0.6);
         atmosBus->setFaderLevel(1.0);
         crashBus->setFaderLevel(0.4);
         engineBus->setFaderLevel(0.8);
-        skidBus->setFaderLevel(0.3);
-        tyresBus->setFaderLevel(0.5);
+        skidBus->setFaderLevel(0.75);
+        tyresBus->setFaderLevel(0.4);
         crowdBus->setFaderLevel(1.0);
         reverbBus->setFaderLevel(0.75);
         wiresBus->setFaderLevel(1.0);

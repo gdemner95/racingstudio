@@ -32,6 +32,7 @@ public:
         
         ERRCHECK(system->getEvent ("event:/car/skid", &desc));
         ERRCHECK(desc->createInstance(&skid));
+        ERRCHECK(skid->getParameter("amount", &skidValue));
         ERRCHECK(skid->start());
         
         ERRCHECK(system->getEvent ("event:/car/tyres", &desc));
@@ -57,13 +58,18 @@ public:
     void changeGear(Studio::System* system, double value)
     {
         gear = value;
-        if (gear < prevGear)                                                                    //if the gear is less than the previous, play the blowoof sound
+        if (gear > prevGear)                                                                    //if the gear is less than the previous, play the blowoff sound
         {
-            ERRCHECK(gearChange->setValue(value / 4.0));
+            if(gear != -1){
+            ERRCHECK(gearChange->setValue(value));
             prevGear = gear;
-        };
-        
-        ERRCHECK (gearEvent->start());
+            }
+        }
+        else
+        {
+            ERRCHECK(gearChange->setValue(0.0));
+        }
+        ERRCHECK(gearEvent->start());
     }
     void setRpm(double value)
     {
